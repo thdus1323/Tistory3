@@ -66,18 +66,18 @@
 </div>
 
 <script>
-    let isSame = false; //비밀번호 같니?
-    let canUseUserName = false; //유저네임 통과니?
+    let isPasswordSame = false; //비밀번호 같니?
+    let isUserNamePass = false; //유저네임 통과니?
 
     //비밀번호 일치
     function submitCheck() {
-        if (isSame === false) {
+        if (isPasswordSame === false) {
             alert("비밀번호가 일치하지 않습니다.");
             return false;
         }
 
         //유저네임 중복체크
-        if (canUseUserName === false) {
+        if (isUserNamePass === false) {
             alert("유저네임 중복체크가 필요합니다.");
             return false;
         } else {
@@ -92,32 +92,31 @@
         if (password === passwordCheck) {
             $("#error-log").css("display","none");
             $("#success-log").css("display","block");
-            isSame = true;
+            isPasswordSame = true;
         } else {
             $("#success-log").css("display","none");
             $("#error-log").css("display","block");
-            isSame = false;
+            isPasswordSame = false;
         }
     }
 
     function checkUsername(){
         let username = $("#username").val();
-        //통신
-
         console.log("username", username);
-
+        //통신
         $.ajax({
             //get으로 usernameCheck해서 username을 받아오면
             url: "/usernameCheck?username="+username,
             method: "get",
+            dataType: "json"
         }).done(res=>{
             console.log("성공", res);
-            if(res === "userNameIsExists"){ //res가 ok이면 통과못함.
-                canUseUserName = false;
+            if(res.data === "사용불가능"){ //res가 ok이면 통과못함.
+                isUserNamePass = false;
                 alert(username + "중복되었습니다");
             }
             else{ //res가 ok가 아니면 통과
-                canUseUserName = true;
+                isUserNamePass = true;
                 alert(username + "아이디를 사용할 수 있어요");
             }
         }).fail(res=>{

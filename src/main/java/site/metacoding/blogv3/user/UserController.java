@@ -22,15 +22,16 @@ public class UserController {
     // 동일 한 유저네임이 있어? 하고 물어보는거니까? 조회용도!!
     // http://localhost:8080/usernameCheck?username=ssar
     @GetMapping("/usernameCheck") //usernameCheck get 메서드
-    public @ResponseBody String usernameCheck(@RequestParam String username){
+    @ResponseBody
+    public ResponseDTO<String>  usernameCheck(@RequestParam String username){
         // DB에 username이 ssar인 친구가 있어? -> service, repository
 
         System.out.println("username : "+username);
         boolean isExists = userService.isUsernameExists(username);
         if(isExists){
-            return "userNameIsNotExists"; // no(username 중복안됨)
+            return new ResponseDTO<>("username 중복됨", "사용불가능"); // no(username 중복안됨)
         } else {
-            return "userNameIsExists"; //ok(username 중복됨.)
+            return new ResponseDTO<>("username 중복안됨", "사용가능"); //ok(username 중복됨.)
         }
     }
 
