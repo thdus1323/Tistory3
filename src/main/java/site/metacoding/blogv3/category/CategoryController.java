@@ -14,6 +14,7 @@ import site.metacoding.blogv3.user.UserService;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final UserService userService;
     private final HttpSession session;
 
     @GetMapping("/s/category/writeForm")
@@ -29,9 +30,12 @@ public class CategoryController {
            return "redirect:/login-form";
         }
         System.out.println("user = " + user);
+
+        //category 객체 생성 및 속성 지정
         Category category = new Category();
         category.setCategoryName(categoryName);
         System.out.println("categoryName = " + categoryName);
+        //카테고리 저장
         category.setUser(user);
         categoryService.save(category);
         return "redirect:/s/post/write-form";
