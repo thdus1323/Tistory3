@@ -15,10 +15,6 @@ public class IndexController {
 
     //category view----------------------------------------------
 
-    @GetMapping("/s/category/writeForm")
-    public String caWriteForm() {
-        return "/category/writeForm";
-    }
 
 
     //post view----------------------------------------------
