@@ -3,6 +3,7 @@ package site.metacoding.blogv3.board;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3.category.Category;
 import site.metacoding.blogv3.category.CategoryRepository;
 import site.metacoding.blogv3.user.User;
@@ -45,5 +46,20 @@ public class BoardService {
     //글 조회
     public List<Board> findByUserId(Integer userId) {
             return boardRepository.findByUser_UserId(userId);
+    }
+
+    public Board findByBoardId(Integer boardId) {
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없음: " + boardId));
+
+    }
+
+    //게시글 수정
+    @Transactional
+    public void updateBoard(Integer boardId, BoardRequest.WriteDTO writeDTO){
+        int editBoard = boardRepository.updateBoard(boardId,writeDTO.getTitle(), writeDTO.getContent());
+        if (editBoard == 0) {
+            throw new RuntimeException("수정된 게시글이 없습니다.: " + boardId);
+        }
     }
 }

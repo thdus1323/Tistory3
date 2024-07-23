@@ -76,8 +76,18 @@ public class BoardController {
     }
 
     //상세보기
-    @GetMapping("/s/user/1")
-    public String detail() {
+    @GetMapping("/s/user/{boardId}")
+    public String detail(@PathVariable Integer boardId, Model model) {
+        Board board = boardService.findByBoardId(boardId);
+        model.addAttribute("board", board);
         return "/post/detail";
+    }
+
+    //글쓰기 수정
+    @PostMapping("/s/update/{boardId}")
+    public String update(@PathVariable Integer boardId, BoardRequest.WriteDTO writeDTO) {
+        boardService.updateBoard(boardId, writeDTO);
+        return "redirect:/user/{userId}/post";
+
     }
 }

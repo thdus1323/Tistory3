@@ -17,6 +17,12 @@ public class UserController {
     private final UserService userService;
     private final HttpSession session;
 
+    @GetMapping({"/","/post/1"})
+    public String index() {
+//        System.out.println("체크: index 실행됨");
+        return "main";
+    }
+
     // 파일응답(Controller, ViewResolover 발동), 데이터응답(ResponseBody, MessageConverter)
     // Query String 공부하기
     // 동일 한 유저네임이 있어? 하고 물어보는거니까? 조회용도!!
