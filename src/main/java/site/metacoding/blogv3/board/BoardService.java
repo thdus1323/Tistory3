@@ -42,6 +42,7 @@ public class BoardService {
         //위의 정보들을 담은 보드를 repository에 저장해요.
     }
 
+    //글 조회
     public List<Board> findByUserId(Integer userId) {
             return boardRepository.findByUser_UserId(userId);
     }
