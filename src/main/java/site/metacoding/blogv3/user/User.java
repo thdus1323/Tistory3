@@ -38,7 +38,6 @@ public class User {
     private List<Category> categories;
 
     @Builder
-
     public User(Integer userId, String userName, String userPassword, String comfirmUserPassword, String userEmail, LocalDateTime createdAt, List<Category> categories) {
         this.userId = userId;
         this.userName = userName;
@@ -47,5 +46,18 @@ public class User {
         this.userEmail = userEmail;
         this.createdAt = createdAt;
         this.categories = categories;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", comfirmUserPassword='" + comfirmUserPassword + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", createdAt=" + createdAt +
+                ", categories=" + categories +
+                '}';
     }
 }

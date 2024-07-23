@@ -13,10 +13,10 @@
 
     <form id="hello" action="/s/post" method="post" enctype="multipart/form-data" onsubmit="return getQuill()">
         <div class="form-group">
-            <select class="form-control" name="categoryId">
-
-                <option value="1">제목</option>
-
+            <select class="form-control" name="categoryId" required>
+                {{#categories}}
+                <option value="{{categoryId}}">{{categoryName}}</option>
+                {{/categories}}
             </select>
         </div>
         <input type="text" placeholder="Enter Title" name="title" class="form-control">
@@ -85,6 +85,15 @@
         $("#content").html(quillContent);
         return true;
     }
+
+    $(document).ready(function(){
+        var categoryName = `${categoryName}`;
+        $("select[name='categoryId'] option").each(function(){
+            if ($(this).text() === categoryName){
+                $(this).prop('selected', true);
+            }
+        });
+    });
 </script>
 
 <!-- Include the Quill library -->

@@ -25,16 +25,15 @@ public class CategoryController {
     @PostMapping("/s/category")
     public String getCategory(@RequestParam String categoryName){
         User user = (User) session.getAttribute("sessionUser");
-        System.out.println("이거 나와???");
         if(user == null){
            return "redirect:/login-form";
         }
-        System.out.println("user = " + user);
+//        System.out.println("user = " + user);
 
         //category 객체 생성 및 속성 지정
         Category category = new Category();
         category.setCategoryName(categoryName);
-        System.out.println("categoryName = " + categoryName);
+
         //카테고리 저장
         category.setUser(user);
         categoryService.save(category);

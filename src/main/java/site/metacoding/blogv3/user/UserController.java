@@ -56,10 +56,9 @@ public class UserController {
     //로그인
     @PostMapping("/login")
     public String login(UserRequest.LoginDTO reqDTO) {
-        System.out.println("reqDTO = " + reqDTO);
         User sessionUser = userService.login(reqDTO);
         session.setAttribute("sessionUser", sessionUser);
-        System.out.println("sessionUser = " + sessionUser);
+//        System.out.println("sessionUser = " + sessionUser);
         return "redirect:/";
     }
 

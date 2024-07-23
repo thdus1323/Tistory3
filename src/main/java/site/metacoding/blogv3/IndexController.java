@@ -10,6 +10,7 @@ public class IndexController {
 
     @GetMapping({"/","/post/1"})
     public String index() {
+        System.out.println("체크: index 실행됨");
         return "main";
     }
 
@@ -19,20 +20,11 @@ public class IndexController {
 
     //post view----------------------------------------------
 
-    @GetMapping("/s/user/1")
-    public String detail() {
-        return "/post/detail";
-    }
 
-    @GetMapping("/user/1/post")
-    public String list() {
-        return "/post/list";
-    }
 
-    @GetMapping("/s/post/write-form")
-    public String poWriteForm() {
-        return "/post/writeForm";
-    }
+
+
+
 
 
 
