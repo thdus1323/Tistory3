@@ -77,9 +77,21 @@ public class BoardController {
 
     //상세보기
     @GetMapping("/s/user/{boardId}")
-    public String detail(@PathVariable Integer boardId, Model model) {
+    public String detail(@PathVariable Integer boardId, Model model, HttpSession session) {
         Board board = boardService.findByBoardId(boardId);
+        User currentUser = (User) session.getAttribute("sessionUser");
+
+        if (currentUser == null){
+            return "redirect:/login-form";
+        }
+
+        Integer currentUserId = currentUser.getUserId();
+        Integer pageOwnerId = board.getUser().getUserId();
+
         model.addAttribute("board", board);
+        model.addAttribute("boardId", boardId);
+        model.addAttribute("pageOwnerId", pageOwnerId);
+        model.addAttribute("currentUserId", currentUserId);
         return "/post/detail";
     }
 
@@ -88,6 +100,5 @@ public class BoardController {
     public String update(@PathVariable Integer boardId, BoardRequest.WriteDTO writeDTO) {
         boardService.updateBoard(boardId, writeDTO);
         return "redirect:/user/{userId}/post";
-
     }
 }

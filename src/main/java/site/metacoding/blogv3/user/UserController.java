@@ -73,6 +73,11 @@ public class UserController {
         return "/user/loginForm";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:login-form";
+    }
 
     @GetMapping("/s/user")
     public String updateForm() {

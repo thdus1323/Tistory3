@@ -29,10 +29,7 @@ public class IndexController {
 
 
 
-    @GetMapping("/logout")
-    public String logout() {
-        return "redirect:/user/loginForm";
-    }
+
 
 
     @GetMapping("/user/password-reset-form")
