@@ -7,11 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import site.metacoding.blogv3.category.Category;
 import site.metacoding.blogv3.category.CategoryService;
 import site.metacoding.blogv3.user.User;
@@ -97,8 +96,14 @@ public class BoardController {
 
     //글쓰기 수정
     @PostMapping("/s/update/{boardId}")
-    public String update(@PathVariable Integer boardId, BoardRequest.WriteDTO writeDTO) {
-        boardService.updateBoard(boardId, writeDTO);
-        return "redirect:/user/{userId}/post";
+    @ResponseBody
+    public ResponseEntity<?> update(@PathVariable Integer boardId, @RequestBody BoardRequest.WriteDTO writeDTO) {
+        try{
+            boardService.updateBoard(boardId, writeDTO);
+            return ResponseEntity.ok().build();
+        }catch(Exception e){
+            return ResponseEntity.status(500).body("수정 중 오류 발생");
+        }
+//        return "redirect:/user/{userId}/post";
     }
 }
