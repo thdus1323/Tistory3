@@ -56,9 +56,9 @@ public class BoardService {
 
     //게시글 수정
     @Transactional
-    public void updateBoard(Integer boardId, BoardRequest.WriteDTO writeDTO){
-        Board board = boardRepository.findByBoardId(boardId)
-                .orElseThrow(() -> new RuntimeException("수정된 게시물이 없습니다.: " + boardId));
+    public void updateBoard(Integer boardId, BoardRequest.WriteDTO writeDTO) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없음: " + boardId));
         board.setBoardTitle(writeDTO.getTitle());
         board.setBoardContent(writeDTO.getContent());
         boardRepository.save(board);

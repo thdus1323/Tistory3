@@ -1,9 +1,10 @@
 {{>/layout/main-header}}
 
 <div class="container">
-    <input id="postId" type="hidden" value="1" />
+    <input id="postId" type="hidden" value="{{board.boardId}}" />
     <input id="pageOwnerId" type="hidden" value="{{pageOwnerId}}" />
     <input id="my-loveId" type="hidden" value="1">
+    <input id="currentUserId" type="hidden" value="{{currentUserId}}">
 
 
     <div class="my_post_detail_title">
@@ -30,9 +31,6 @@
 
 
     <div class="my_mt_md_1">
-        <input type="hidden" id="boardId" value="{{boardId}}"/>
-        <input type="hidden" id="pageOwnerId" value="{{pageOwnerId}}"/>
-        <input type="hidden" id="currentUserId" value="{{currentUserId}}"/>
         <button id="btn-edit" class="btn btn-outline-success">수정</button>
         <button id="btn-delete" class="btn btn-outline-danger">삭제</button>
     </div>
@@ -71,8 +69,10 @@
         function handleEditButtonClick(event){
                 event.preventDefault();
                 if (pageOwnerId !== currentUserId){
-                alert('권한이 없습니다');
-            }
+                    alert('권한이 없습니다.')
+                    return;
+                 }
+
                 let boardTitle = document.getElementById('boardTitle').value;
                 let boardContent = document.getElementById('boardContent').value;
 
@@ -82,6 +82,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        userId:currentUserId,
                         title: boardTitle,
                         content: boardContent
                     })

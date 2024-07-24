@@ -95,15 +95,31 @@ public class BoardController {
     }
 
     //글쓰기 수정
+
     @PostMapping("/s/update/{boardId}")
-    @ResponseBody
-    public ResponseEntity<?> update(@PathVariable Integer boardId, @RequestBody BoardRequest.WriteDTO writeDTO) {
-        try{
-            boardService.updateBoard(boardId, writeDTO);
-            return ResponseEntity.ok().build();
-        }catch(Exception e){
-            return ResponseEntity.status(500).body("수정 중 오류 발생");
+   public String updateBoard(@PathVariable Integer boardId, BoardRequest.WriteDTO reqDTO) {
+        User currentUser = (User) session.getAttribute("sessionUser");
+
+        if (currentUser == null) {
+            return "redirect:/s/user/{boardId}";
         }
-//        return "redirect:/user/{userId}/post";
+        if (reqDTO.getUserId().equals(currentUser.getUserId())){
+            boardService.updateBoard(boardId, reqDTO);
+            return "redirect:/user/" + reqDTO.getUserId() + "/post";
+        } else {
+            return "redirect:/s/user/" + boardId;
+        }
+
+
+
+//        return "redirect:/user/" + reqDTO.getUserId() + "/post";
     }
+
+
+    //수정 페이지
+    @GetMapping("/s/post/update-form")
+    public String detail() {
+        return "/post/updateForm";
+    }
+
 }
