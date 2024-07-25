@@ -16,5 +16,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     //유저아이디로 조회_게시글
     List<Board> findByUser_UserId(Integer userId);
 
+    //글쓰기 삭제
+
 
 }

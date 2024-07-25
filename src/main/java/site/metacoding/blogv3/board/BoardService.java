@@ -63,4 +63,10 @@ public class BoardService {
 //        board.setBoardContent(writeDTO.getContent());
         boardRepository.save(board);
     }
+
+    //게시글 삭제
+    @Transactional
+    public void deleteBoard(Integer boardId){
+        boardRepository.deleteById(boardId);
+    }
 }

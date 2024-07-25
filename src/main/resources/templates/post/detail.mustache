@@ -1,8 +1,8 @@
 {{>/layout/main-header}}
 
 <div class="container">
-    <input id="postId" type="hidden" value="{{board.boardId}}" />
-    <input id="pageOwnerId" type="hidden" value="{{pageOwnerId}}" />
+    <input id="postId" type="hidden" value="{{board.boardId}}"/>
+    <input id="pageOwnerId" type="hidden" value="{{pageOwnerId}}"/>
     <input id="my-loveId" type="hidden" value="1">
     <input id="currentUserId" type="hidden" value="{{currentUserId}}">
 
@@ -10,7 +10,7 @@
     <div class="my_post_detail_title">
         <h2>{{board.boardTitle}}</h2>
     </div>
-    <hr />
+    <hr/>
 
     <div class="my_post_detail_content">
         {{{board.boardContent}}}
@@ -19,7 +19,7 @@
         <div class="my_post_info">
 
             <i class="fa-solid fa-heart my_fake_like my_mr_sm_1" id="heart-1"
-                onclick="postLikeClick('1')"></i>
+               onclick="postLikeClick('1')"></i>
             by <b>유저네임</b> <span class="my_text_body_sm">날짜</span>
 
             <i class="far fa-heart my_fake_un_like my_mr_sm_1" id="my-heart"></i>
@@ -35,24 +35,24 @@
         <button id="btn-delete" class="btn btn-outline-danger">삭제</button>
     </div>
 
-    <br />
+    <br/>
 
     <div class="my_livere">
         <!-- 라이브리 시티 설치 코드 -->
         <div id="lv-container" data-id="city" data-uid="MTAyMC81MTM0MC8yNzgyMQ==">
-<!--            <script type="text/javascript">-->
-<!--                (function (d, s) {-->
-<!--                    var j, e = d.getElementsByTagName(s)[0];-->
+            <!--            <script type="text/javascript">-->
+            <!--                (function (d, s) {-->
+            <!--                    var j, e = d.getElementsByTagName(s)[0];-->
 
-<!--                    if (typeof LivereTower === 'function') { return; }-->
+            <!--                    if (typeof LivereTower === 'function') { return; }-->
 
-<!--                    j = d.createElement(s);-->
-<!--                    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';-->
-<!--                    j.async = true;-->
+            <!--                    j = d.createElement(s);-->
+            <!--                    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';-->
+            <!--                    j.async = true;-->
 
-<!--                    e.parentNode.insertBefore(j, e);-->
-<!--                })(document, 'script');-->
-<!--            </script>-->
+            <!--                    e.parentNode.insertBefore(j, e);-->
+            <!--                })(document, 'script');-->
+            <!--            </script>-->
             <noscript>라이브리 댓글 작성을 위해 JavaScript를 활성화 해주세요</noscript>
         </div>
         <!-- 시티 설치 코드 끝 -->
@@ -62,54 +62,85 @@
 <!--<script src="/js/post/detail.js"></script>-->
 <script>
 
-    document.getElementById('btn-edit').addEventListener('click', function (){
+    //삭제
+    document.getElementById('btn-delete').addEventListener('click', function () {
+        var boardId = document.getElementById('postId').value;
+        var currentUserId = document.getElementById('currentUserId').value;
+
+        if (confirm("정말 삭제하겠습니까?")) {
+            fetch('/s/delete/' + boardId + '?userId=' + currentUserId, {
+                method: 'Delete',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                // body: JSON.stringify({
+                //     userId: currentUserId
+                })
+
+            .then(response => {
+                if (response.ok) {
+                    alert('삭제 성공');
+                    window.location.href = '/user/' + {{currentUserId}} + '/post';
+                } else {
+                    response.text().then(text => alert('삭제 실패: ' + text));
+                }
+            })
+            .catch(error => {
+                console.error('Error', error);
+                alert('삭제 중 오류 발생');
+            });
+        }
+    });
+
+    // 수정
+    document.getElementById('btn-edit').addEventListener('click', function () {
         var boardId = document.querySelector('.my_mt_md_1').getAttribute('data-board-id');
 
         window.location.href = '/s/post/update-form/' + boardId;
     });
 
-    document.addEventListener('DOMContentLoaded', function (){
+    document.addEventListener('DOMContentLoaded', function () {
         let boardId = document.getElementById('postId').value;
         let pageOwnerId = document.getElementById('pageOwnerId').value;
         let currentUserId = document.getElementById('currentUserId').value;
 
-        document.getElementById('btn-edit').addEventListener('click', function (){
-            window.location.href='/s/post/update-form/' + boardId;
+        document.getElementById('btn-edit').addEventListener('click', function () {
+            window.location.href = '/s/post/update-form/' + boardId;
         })
 
-        function handleEditButtonClick(event){
-                event.preventDefault();
-                if (pageOwnerId !== currentUserId){
-                    alert('권한이 없습니다.')
-                    return;
-                 }
+        function handleEditButtonClick(event) {
+            event.preventDefault();
+            if (pageOwnerId !== currentUserId) {
+                alert('권한이 없습니다.')
+                return;
+            }
 
-                let boardTitle = document.getElementById('boardTitle').value;
-                let boardContent = document.getElementById('boardContent').value;
+            let boardTitle = document.getElementById('boardTitle').value;
+            let boardContent = document.getElementById('boardContent').value;
 
-                fetch(`s/update/${boardId}`,{
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        userId:currentUserId,
-                        title: boardTitle,
-                        content: boardContent
+            fetch(`s/update/${boardId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: currentUserId,
+                    title: boardTitle,
+                    content: boardContent
+                })
+            })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('수정 성공');
+                            window.location.reload();
+                        } else {
+                            alert('수정실패');
+                        }
                     })
-                })
-                .then(response => {
-                    if (response.ok){
-                        alert('수정 성공');
-                        window.location.reload();
-                    }else {
-                        alert('수정실패');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('수정 중 오류발생')
-                });
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('수정 중 오류발생')
+                    });
         }
 
         let editButton = document.getElementById('btn-edit');

@@ -17,6 +17,7 @@ import site.metacoding.blogv3.category.CategoryService;
 import site.metacoding.blogv3.user.User;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j // 로그에 주석 남기는 것.
 @Controller
@@ -152,6 +153,28 @@ public class BoardController {
 
         System.out.println("board = " + board);
         return "/post/updateForm";
+    }
+
+    //삭제하기
+    @DeleteMapping("/s/delete/{boardId}")
+    public ResponseEntity<String> deleteBoard(@PathVariable("boardId") Integer boardId, @RequestParam Integer userId){
+        User currentUser = (User) session.getAttribute("sessionUser");
+
+        if (currentUser == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 해주세요");
+        }
+
+        Board board = boardService.findByBoardId(boardId);
+        if (board == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시글을 찾을 수 없음");
+        }
+        if (!board.getUser().getUserId().equals(currentUser.getUserId())){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한 없음");
+        }
+
+        boardService.deleteBoard(boardId);
+
+        return ResponseEntity.ok("게시글 삭제 성공");
     }
 
 }
