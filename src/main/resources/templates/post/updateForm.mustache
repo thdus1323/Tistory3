@@ -1,40 +1,33 @@
 {{>/layout/main-header}}
 
 <div class="container">
-    <input id="postId" type="hidden" value="1" />
-    <input id="pageOwnerId" type="hidden" value="1" />
-    <input id="my-loveId" type="hidden" value="1">
-    <input id="currentUserId" type="hidden" value="1">
+    <input id="postId" type="hidden" value="{{board.boardId}}" />
+    <input id="pageOwnerId" type="hidden" value="{{board.user.userId}}" />
+    <input id="currentUserId" type="hidden" value="{{currentUserId}}">
 
+    {{#isOwner}}
     <div class="my_post_detail_username">
-        유저네임
+        {{board.user.userName}}
     </div>
     <div class="my_post_detail_title">
-        <h2>{{board.boardTitle}}</h2>
+        <h2><input id="boardTitle" type="text" value="{{board.boardTitle}}" ></h2>
     </div>
     <hr />
 
     <div class="my_post_detail_content">
-        {{board.boardContent}}    </div>
-<!--    <div class="my_post_info_box d-flex">-->
-<!--        <div class="my_post_info">-->
-
-<!--            <i class="fa-solid fa-heart my_fake_like my_mr_sm_1" id="heart-1"-->
-<!--                onclick="postLikeClick('1')"></i>-->
-<!--            by <b>유저네임</b> <span class="my_text_body_sm">날짜</span>-->
-
-<!--            <i class="far fa-heart my_fake_un_like my_mr_sm_1" id="my-heart"></i>-->
-<!--            by <b>유저네임</b> <span class="my_text_body_sm">날짜</span>-->
-
-
-<!--        </div>-->
-<!--    </div>-->
-
+        <textarea id = "boardContent">{{{board.boardContent}}}</textarea>
+    </div>
 
     <div class="my_mt_md_1">
         <button id="btn-edit" class="btn btn-outline-success">수정완료</button>
 <!--        <button id="btn-delete" class="btn btn-outline-danger">삭제</button>-->
     </div>
+    {{/isOwner}}
+    {{^isOwner}}
+        <div>
+            <p>권한 없음</p>
+        </div>
+    {{/isOwner}}
 
     <br />
 
@@ -62,6 +55,44 @@
 
 <!--<script src="/js/post/detail.js"></script>-->
 <script>
+    function stripHtml(html){
+        var temporalDivElement = document.createElement('div');
+        temporalDivElement.textContent = html;
+        return temporalDivElement.textContent || temporalDivElement.innerText ||"";
+    }
 
+    document.getElementById('boardContent').value = stripHtml('{{{board.boardContent}}}');
+
+    document.getElementById('btn-edit').addEventListener('click', function (){
+        var boardId = document.getElementById('postId').value;
+        var boardTitle = document.getElementById('boardTitle').value;
+        var boardContent = document.getElementById('boardContent').value;
+        // var currentUserId = document.getElementById('currentUserId').value;
+        alert(boardTitle);
+
+        fetch('/s/update/' + boardId,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                boardTitle: boardTitle,
+                boardContent: boardContent,
+
+            })
+        })
+        .then(response => {
+            if (response.ok){
+                alert('수정 성공');
+                window.location.href = '/user/{{board.user.userId}}/post';
+            } else {
+                response.text().then(text => alert('수정 실패: ' + text));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('수정 중 오류 발생')
+        });
+    });
 </script>
 {{>/layout/footer}}

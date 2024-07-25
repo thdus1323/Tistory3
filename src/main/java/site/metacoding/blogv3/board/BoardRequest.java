@@ -15,4 +15,10 @@ public class BoardRequest {
         private String categoryName;
 
     }
+
+    @Data
+    public static class UpdateDTO {
+        private String boardTitle;
+        private String boardContent;
+    }
 }

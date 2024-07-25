@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -97,18 +98,29 @@ public class BoardController {
     //게시판 글쓰기 수정 메서드
 
     @PostMapping("/s/update/{boardId}")
-   public String updateBoard(@PathVariable("boardId") Integer boardId, BoardRequest.WriteDTO reqDTO,HttpSession session) {
+   public ResponseEntity<?> updateBoard(@PathVariable("boardId") Integer boardId,@RequestBody BoardRequest.UpdateDTO reqDTO) {
         User currentUser = (User) session.getAttribute("sessionUser");
 
         if (currentUser == null) {
-            return "redirect:/s/user/" + boardId;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 해주세요");
         }
-        if (reqDTO.getUserId().equals(currentUser.getUserId())){
-            boardService.updateBoard(boardId, reqDTO);
-            return "redirect:/user/" + reqDTO.getUserId() + "/post";
-        } else {
-            return "redirect:/s/user/" + boardId;
+
+        Board board = boardService.findByBoardId(boardId);
+        if (board == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시글을 찾을 수 없음");
         }
+        if(!board.getUser().getUserId().equals(currentUser.getUserId())){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한 없음.");
+        }
+
+        System.out.println("reqDTO = " + reqDTO);
+
+        board.setBoardTitle(reqDTO.getBoardTitle());
+        board.setBoardContent(reqDTO.getBoardContent());
+        boardService.updateBoard(board);
+
+        return ResponseEntity.ok("게시글 수정 성공");
+
 
 
 
@@ -118,9 +130,26 @@ public class BoardController {
 
     //게시판 수정 폼
     @GetMapping("/s/post/update-form/{boardId}")
-    public String updateForm(@PathVariable("boardId") Integer boardId, Model model) {
+    public String updateForm(@PathVariable("boardId") Integer boardId, Model model,HttpSession session) {
+        User currentUser = (User) session.getAttribute("sessionUser");
+
+        if (currentUser == null) {
+            return "redirect:login-form";
+        }
+
         Board board = boardService.findByBoardId(boardId);
+
+//        if (!board.getUser().getUserId().equals(currentUser.getUserId())){
+//            return "redirect:/s/user/" + boardId;
+//        }
+//        model.addAttribute("board", board);
+//        model.addAttribute("username", currentUser.getUserName());
+
         model.addAttribute("board", board);
+        model.addAttribute("username", currentUser.getUserName());
+        model.addAttribute("currentUserId", currentUser.getUserId());
+        model.addAttribute("isOwner", board.getUser().getUserId().equals(currentUser.getUserId()));
+
         System.out.println("board = " + board);
         return "/post/updateForm";
     }

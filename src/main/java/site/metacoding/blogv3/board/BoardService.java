@@ -56,11 +56,11 @@ public class BoardService {
 
     //게시글 수정
     @Transactional
-    public void updateBoard(Integer boardId, BoardRequest.WriteDTO writeDTO) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없음: " + boardId));
-        board.setBoardTitle(writeDTO.getTitle());
-        board.setBoardContent(writeDTO.getContent());
+    public void updateBoard(Board board) {
+//        Board board = boardRepository.findById(boardId)
+//                .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없음: " + boardId));
+//        board.setBoardTitle(writeDTO.getTitle());
+//        board.setBoardContent(writeDTO.getContent());
         boardRepository.save(board);
     }
 }
