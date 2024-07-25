@@ -78,7 +78,7 @@ public class BoardController {
 
     //상세보기
     @GetMapping("/s/user/{boardId}")
-    public String detail(@PathVariable Integer boardId, Model model, HttpSession session) {
+    public String detail(@PathVariable Integer boardId, Model model) {
         Board board = boardService.findByBoardId(boardId);
         User currentUser = (User) session.getAttribute("sessionUser");
 
@@ -131,7 +131,7 @@ public class BoardController {
 
     //게시판 수정 폼
     @GetMapping("/s/post/update-form/{boardId}")
-    public String updateForm(@PathVariable("boardId") Integer boardId, Model model,HttpSession session) {
+    public String updateForm(@PathVariable("boardId") Integer boardId, Model model) {
         User currentUser = (User) session.getAttribute("sessionUser");
 
         if (currentUser == null) {
