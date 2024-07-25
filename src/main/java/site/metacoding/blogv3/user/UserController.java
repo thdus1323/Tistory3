@@ -46,7 +46,7 @@ public class UserController {
     public String join(UserRequest.JoinDTO reqDTO){
         try {
             userService.join(reqDTO);
-            System.out.println("reqDTO = " + reqDTO);
+//            System.out.println("reqDTO = " + reqDTO);
             return "/user/loginForm";
         } catch (RuntimeException e) {
             System.out.println("회원가입 오류: " + e.getMessage());

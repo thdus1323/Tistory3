@@ -1,13 +1,13 @@
 {{>/layout/main-header}}
 
 <div class="container">
-    <input id="postId" type="hidden" value="{{board.boardId}}" />
-    <input id="pageOwnerId" type="hidden" value="{{pageOwnerId}}" />
+    <input id="postId" type="hidden" value="1" />
+    <input id="pageOwnerId" type="hidden" value="1" />
     <input id="my-loveId" type="hidden" value="1">
-    <input id="currentUserId" type="hidden" value="{{currentUserId}}">
+    <input id="currentUserId" type="hidden" value="1">
 
     <div class="my_post_detail_username">
-        {{board.userId}}
+        유저네임
     </div>
     <div class="my_post_detail_title">
         <h2>{{board.boardTitle}}</h2>
@@ -15,8 +15,7 @@
     <hr />
 
     <div class="my_post_detail_content">
-        {{{board.boardContent}}}
-    </div>
+        {{board.boardContent}}    </div>
 <!--    <div class="my_post_info_box d-flex">-->
 <!--        <div class="my_post_info">-->
 

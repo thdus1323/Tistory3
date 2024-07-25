@@ -3,6 +3,7 @@ package site.metacoding.blogv3.board;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import site.metacoding.blogv3.category.Category;
 import site.metacoding.blogv3.user.User;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
+@ToString(exclude = {"category", "user"})
 public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

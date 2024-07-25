@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import site.metacoding.blogv3.category.Category;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Table(name = "user_tb")
 @NoArgsConstructor
 @Data
+@ToString(exclude = "categories")
 public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -48,16 +50,16 @@ public class User {
         this.categories = categories;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", userName='" + userName + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", comfirmUserPassword='" + comfirmUserPassword + '\'' +
-                ", userEmail='" + userEmail + '\'' +
-                ", createdAt=" + createdAt +
-                ", categories=" + categories +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "userId=" + userId +
+//                ", userName='" + userName + '\'' +
+//                ", userPassword='" + userPassword + '\'' +
+//                ", comfirmUserPassword='" + comfirmUserPassword + '\'' +
+//                ", userEmail='" + userEmail + '\'' +
+//                ", createdAt=" + createdAt +
+//                ", categories=" + categories +
+//                '}';
+//    }
 }

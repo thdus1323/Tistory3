@@ -3,6 +3,7 @@ package site.metacoding.blogv3.category;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import site.metacoding.blogv3.board.Board;
 import site.metacoding.blogv3.user.User;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @Table(name = "category_tb")
 @NoArgsConstructor
+@ToString(exclude = {"user","boards"})
 public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

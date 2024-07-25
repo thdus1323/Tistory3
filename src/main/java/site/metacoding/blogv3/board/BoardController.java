@@ -57,7 +57,7 @@ public class BoardController {
 
         boardService.write(user, reqDTO);
         //유저랑, dto를 서비스에 보내고.
-        System.out.println("reqDTO111 = " + reqDTO);
+//        System.out.println("reqDTO111 = " + reqDTO);
         // 디티오에 뭐 담겼는지 볼까?
         HttpSession session = request.getSession();
         //httpsession에 우리가 요청하는 세션을 저장하자.
@@ -94,14 +94,14 @@ public class BoardController {
         return "/post/detail";
     }
 
-    //글쓰기 수정
+    //게시판 글쓰기 수정 메서드
 
     @PostMapping("/s/update/{boardId}")
-   public String updateBoard(@PathVariable Integer boardId, BoardRequest.WriteDTO reqDTO) {
+   public String updateBoard(@PathVariable("boardId") Integer boardId, BoardRequest.WriteDTO reqDTO,HttpSession session) {
         User currentUser = (User) session.getAttribute("sessionUser");
 
         if (currentUser == null) {
-            return "redirect:/s/user/{boardId}";
+            return "redirect:/s/user/" + boardId;
         }
         if (reqDTO.getUserId().equals(currentUser.getUserId())){
             boardService.updateBoard(boardId, reqDTO);
@@ -116,9 +116,12 @@ public class BoardController {
     }
 
 
-    //수정 페이지
-    @GetMapping("/s/post/update-form")
-    public String detail() {
+    //게시판 수정 폼
+    @GetMapping("/s/post/update-form/{boardId}")
+    public String updateForm(@PathVariable("boardId") Integer boardId, Model model) {
+        Board board = boardService.findByBoardId(boardId);
+        model.addAttribute("board", board);
+        System.out.println("board = " + board);
         return "/post/updateForm";
     }
 

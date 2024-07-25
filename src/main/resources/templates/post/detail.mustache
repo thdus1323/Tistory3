@@ -61,10 +61,21 @@
 
 <!--<script src="/js/post/detail.js"></script>-->
 <script>
+
+    document.getElementById('btn-edit').addEventListener('click', function (){
+        var boardId = document.querySelector('.my_mt_md_1').getAttribute('data-board-id');
+
+        window.location.href = '/s/post/update-form/' + boardId;
+    });
+
     document.addEventListener('DOMContentLoaded', function (){
-        let boardId = document.getElementById('boardId').value;
+        let boardId = document.getElementById('postId').value;
         let pageOwnerId = document.getElementById('pageOwnerId').value;
         let currentUserId = document.getElementById('currentUserId').value;
+
+        document.getElementById('btn-edit').addEventListener('click', function (){
+            window.location.href='/s/post/update-form/' + boardId;
+        })
 
         function handleEditButtonClick(event){
                 event.preventDefault();
